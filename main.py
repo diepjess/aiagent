@@ -3,7 +3,8 @@ import os
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
-from config import SYSTEM_PROMPT, MODEL_NAME
+from config import MODEL_NAME
+from prompts import SYSTEM_PROMPT
 
 
 def main():
