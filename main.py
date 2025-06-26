@@ -3,8 +3,10 @@ import os
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
+
 from config import MODEL_NAME
 from prompts import SYSTEM_PROMPT
+from call_function import available_functions
 
 
 def main():
@@ -37,15 +39,22 @@ def generate_content(client, messages, is_verbose):
     response = client.models.generate_content(
         model=MODEL_NAME,
         contents=messages,
-        config=types.GenerateContentConfig(system_instruction=SYSTEM_PROMPT)
+        config=types.GenerateContentConfig(
+            tools = [available_functions],
+            system_instruction=SYSTEM_PROMPT,
+        ),
     )
     if is_verbose:
         prompt_token = response.usage_metadata.prompt_token_count
         response_token = response.usage_metadata.candidates_token_count
         print(f"Prompt tokens: {prompt_token}")
         print(f"Response tokens: {response_token}")
-    print("Response:")
-    print(response.text)
+    if response.function_calls:
+        for function_call_part in response.function_calls:
+            print(f"Calling function: {function_call_part.name}({function_call_part.args})")
+    else:
+        print("Response:")
+        print(response.text)
 
 
 if __name__ == "__main__":
