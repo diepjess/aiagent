@@ -1,7 +1,8 @@
 from functions.get_files_info import get_files_info
+from functions.get_file_content import get_file_content
 
     
-def test():
+def test_get_files_info():
     result = get_files_info("calculator", ".")
     print("Result for calculator directory:")
     print(result)
@@ -33,5 +34,23 @@ def test():
     print()
 
 
+def test_get_file_content():
+    result = get_file_content("calculator", "lorem.txt")
+    print('Result from "lorem.txt"')
+    print(result)
+
+    result = get_file_content("calculator", "main.py")
+    print('Result from "main.py"')
+    print(result)
+    
+    result = get_file_content("calculator", "pkg/calculator.py")
+    print('Result from "pkg/calculator.py"')
+    print(result)
+    
+    result = get_file_content("calculator", "/bin/cat")
+    print('Result from "/bin/cat"')
+    print(result)
+
+
 if __name__ == "__main__":
-    test()
+    test_get_file_content()
