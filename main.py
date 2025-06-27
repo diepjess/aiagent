@@ -6,7 +6,7 @@ from google.genai import types
 
 from config import MODEL_NAME
 from prompts import SYSTEM_PROMPT
-from call_function import available_functions
+from call_function import available_functions, call_function
 
 
 def main():
@@ -51,7 +51,14 @@ def generate_content(client, messages, is_verbose):
         print(f"Response tokens: {response_token}")
     if response.function_calls:
         for function_call_part in response.function_calls:
-            print(f"Calling function: {function_call_part.name}({function_call_part.args})")
+            #print(f"Calling function: {function_call_part.name}({function_call_part.args})")
+            function_result = call_function(function_call_part, verbose=is_verbose)
+            try:
+                response = function_result.parts[0].function_response.response
+            except (AttributeError, IndexError):
+                raise Exception("Function call did not return a valid response.")
+            if is_verbose:
+                print(f"-> {response}")
     else:
         print("Response:")
         print(response.text)
