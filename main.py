@@ -14,16 +14,16 @@ def main():
     
     is_verbose = "--verbose" in sys.argv
     args = [arg for arg in sys.argv[1:] if not arg.startswith("--")]
+
     if not args:
         print("AI Code Assistant")
         print('\nUsage: python3 main.py "your prompt here" [--verbose]')
         print('Example: python3 main.py "How do I build a calculator app?"')
         sys.exit(1)
+    user_prompt = " ".join(args)
 
     api_key = os.environ.get("GEMINI_API_KEY")
     client = genai.Client(api_key=api_key)
-
-    user_prompt = " ".join(args)
     
     if is_verbose:
         print(f"User prompt: {user_prompt}")
