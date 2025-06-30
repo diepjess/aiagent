@@ -51,14 +51,13 @@ def generate_content(client, messages, is_verbose):
         print(f"Response tokens: {response_token}")
     if response.function_calls:
         for function_call_part in response.function_calls:
-            #print(f"Calling function: {function_call_part.name}({function_call_part.args})")
-            function_result = call_function(function_call_part, verbose=is_verbose)
+            function_call_result = call_function(function_call_part, verbose=is_verbose)
             try:
-                response = function_result.parts[0].function_response.response
+                function_call_response = function_call_result.parts[0].function_response.response
             except (AttributeError, IndexError):
                 raise Exception("Function call did not return a valid response.")
             if is_verbose:
-                print(f"-> {response}")
+                print(f"-> {function_call_response}")
     else:
         print("Response:")
         print(response.text)

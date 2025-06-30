@@ -23,13 +23,16 @@ def run_python_file(working_directory, file_path, args=None):
             timeout=30,
             text=True,
         )
-        result_stdout = result.stdout.decode("utf-8")
-        result_stderr = result.stderr.decode("utf-8")
-        result_code = result.returncode
-        if not result_stdout and not result_stderr:
-            return f"No output produced."
-        output = "\n".join([f"STDOUT:\n{result_stdout}", f"STDERR:\n{result_stderr}"])
-        return output + (f"\nProcess exited with code {result_code}" if result_code != 0 else "")
+        output = []
+        if result.stdout:
+            output.append(f"STDOUT:\n{result.stdout}")
+        if result.stderr:
+            output.append(f"STDERR:\n{result.stderr}")
+        if result.returncode != 0:
+            output.append(f"Process exited with code {result.returncode}")
+        
+        return "\n".join(output) if output else "No output produced"
+
     except Exception as e:
         return f"Error: executing Python file: {e}"
 
