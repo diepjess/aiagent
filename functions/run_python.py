@@ -15,7 +15,15 @@ def run_python_file(working_directory, file_path, args=None):
     try:
         commands = ["python3", abs_file_path]
         if args:
-            commands.extend(args)
+            flags = []
+            for key, value in args.items():
+                if isinstance(value, bool):
+                    if value:
+                        flags.append(f"--{key}")
+                else:
+                    flags.append(f"--{key}")
+                    flags.append(f"{value}")
+            commands.extend(flags)
         result = subprocess.run(
             commands,
             cwd=abs_working_dir,
