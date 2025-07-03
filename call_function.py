@@ -34,9 +34,9 @@ def call_function(function_call_part, verbose=False):
                 )
             ],
         )
-    function_call_part.args.update({"working_directory": WORKING_DIR})
-    # print(f"args: {function_call_part.args}")
-    function_result = function_map[function_name](**function_call_part.args)
+    args = dict(function_call_part.args)
+    args["working_directory"] = WORKING_DIR
+    function_result = function_map[function_name](**args)
     return types.Content(
         role="tool",
         parts=[
